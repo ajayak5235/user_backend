@@ -15,7 +15,7 @@ interface User {
 interface AuthContextType {
   user: User | null
   login: (email: string, password: string) => Promise<void>
-  register: (username: string, email: string, password: string, age: number) => Promise<void>
+  register: (username: string, email: string, password: string, ) => Promise<void>
   logout: () => void
 }
 
@@ -42,16 +42,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
-  const register = async (email: string, password: string) => {
+  const register = async (username: string, email: string, password: string) => {
+    console.log(username,email,password)
     try {
-      const response = await axios.post("http://localhost:3000/api/users/register", { email, password})
-      setUser(response.data)
-      localStorage.setItem("user", JSON.stringify(response.data))
-      toast.success("Registered successfully")
+      await axios.post("http://localhost:3000/api/users/register", { 
+        username, 
+        email, 
+        password 
+      });
+
+      toast.success("Registered successfully");
     } catch (error) {
-      toast.error("Registration failed")
+      toast.error("Registration failed");
     }
-  }
+  };
+  
 
   const logout = () => {
     setUser(null)
